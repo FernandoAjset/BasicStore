@@ -1,0 +1,14 @@
+﻿@model Articulo
+@{
+    ViewData["Title"] = "Eliminar Artículo";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <p>¿Está seguro que desea eliminar el articulo @Model.NombreArticulo?</p>
+    <form asp-action="EliminarArticulo">
+        <input type="text" class="form-control" asp-for="ArticuloID" hidden>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+    </form>
+</div>

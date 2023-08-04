@@ -1,0 +1,23 @@
+﻿@model Articulo
+
+<h2>Edit Articulo</h2>
+<form asp-action="EditarArticulo">
+    <div class="mb-3">
+        <input type="text" class="form-control" id="ArticuloID" asp-for="ArticuloID" hidden>
+        <label for="NombreArticulo" class="form-label">Nombre Artículo</label>
+        <input type="text" class="form-control" id="NombreArticulo" asp-for="NombreArticulo" required>
+    </div>
+    <div class="mb-3">
+        <label for="Descripcion" class="form-label">Descripción</label>
+        <input type="text" class="form-control" id="Descripcion" name="Descripcion" asp-for="Descripcion" required>
+    </div>
+    <div class="mb-3">
+        <label for="PrecioText" class="form-label">Precio</label>
+        <input type="text" class="form-control" id="PrecioText" name="PrecioText" asp-for="PrecioText" required>
+    </div>
+    <div class="mb-3">
+        <label for="Stock" class="form-label">Stock</label>
+        <input type="number" class="form-control" id="Stock" name="Stock" asp-for="Stock" min="0" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>

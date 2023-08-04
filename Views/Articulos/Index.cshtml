@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Articulo>
+
+@{
+    ViewData["Title"] = "Lista de Artículos";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <div class="text-end mb-3">
+        <a class="btn btn-primary" asp-action="CrearArticulo">
+            <i class="bi bi-plus"></i> Agregar Nuevo Artículo
+        </a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre Artículo</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var articulo in Model)
+            {
+                <tr>
+                    <td>@articulo.NombreArticulo</td>
+                    <td>@articulo.Descripcion</td>
+                    <td>@articulo.Precio</td>
+                    <td>@articulo.Stock</td>
+                    <td>
+                        <a class="btn btn-info btn-sm" asp-action="EditarArticulo" asp-route-idArticulo="@articulo.ArticuloID">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                        <a class="btn btn-danger btn-sm" asp-action="EliminarArticulo" asp-route-idArticulo="@articulo.ArticuloID">
+                            <i class="bi bi-trash"></i> Borrar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

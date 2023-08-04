@@ -7,6 +7,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddSingleton<IUsuarioService, UsuarioServicioWithDapper>();
 builder.Services.AddSingleton<IClientesService, ClientesServicioWithDapper>();
+builder.Services.AddSingleton<IArticulosService, ArticulosServiceWithDapper>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
