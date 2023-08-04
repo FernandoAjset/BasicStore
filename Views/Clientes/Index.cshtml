@@ -30,7 +30,7 @@
                     <td>@cliente.Telefono</td>
                     <td>@cliente.Email</td>
                     <td>
-                        <a class="btn btn-info btn-sm" asp-action="EditarCliente" asp-route-id="@cliente.NITCliente">
+                        <a class="btn btn-info btn-sm" asp-action="EditarCliente" asp-route-NITCliente="@cliente.NITCliente">
                             <i class="bi bi-pencil"></i> Editar
                         </a>
                         <a class="btn btn-danger btn-sm" asp-action="EliminarCliente" asp-route-NITCliente="@cliente.NITCliente">

@@ -1,0 +1,33 @@
+﻿@model Cliente
+
+@{
+    ViewData["Title"] = "Crear Nuevo Cliente";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <form method="post">
+        <div class="mb-3">
+            <label for="NITCliente" class="form-label">NIT Cliente</label>
+            <input type="text" class="form-control" id="NITCliente" asp-for="NITCliente" required>
+        </div>
+        <div class="mb-3">
+            <label for="NombreCliente" class="form-label">Nombre Cliente</label>
+            <input type="text" class="form-control" id="NombreCliente" asp-for="NombreCliente" required>
+        </div>
+        <div class="mb-3">
+            <label for="Direccion" class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="Direccion" asp-for="Direccion" required>
+        </div>
+        <div class="mb-3">
+            <label for="Telefono" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="Telefono" asp-for="Telefono" required>
+        </div>
+        <div class="mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="Email" asp-for="Email" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+    </form>
+</div>

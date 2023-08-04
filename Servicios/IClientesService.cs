@@ -80,6 +80,7 @@ namespace ProyectoPrimerParcial.Servicios
                 new
                 {
                     Operacion = 'C',
+                    cliente.NITCliente,
                     cliente.NombreCliente,
                     cliente.Direccion,
                     cliente.Telefono,

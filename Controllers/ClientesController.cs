@@ -24,6 +24,34 @@ namespace ProyectoPrimerParcial.Controllers
                 return RedirectToAction("Error", "Home", new { error = ex.Message });
             }
         }
+
+        public IActionResult CrearCliente()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CrearCliente(Cliente cliente)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var exito = await clientesService.CrearCliente(cliente);
+                    if (exito)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
+
+                return View(cliente);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home", new { error = ex.Message });
+            }
+        }
+
         public async Task<IActionResult> EditarCliente(string nitCliente)
         {
             try
