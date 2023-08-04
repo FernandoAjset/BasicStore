@@ -1,0 +1,30 @@
+﻿@model Cliente
+
+@{
+    ViewData["Title"] = "Editar Cliente";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <form method="post">
+        <input type="text" class="form-control" id="NITCliente" name="NITCliente" value="@Model.NITCliente" hidden>
+        <div class="mb-3">
+            <label for="NombreCliente" class="form-label">Nombre Cliente</label>
+            <input type="text" class="form-control" id="NombreCliente" name="NombreCliente" value="@Model.NombreCliente" required>
+        </div>
+        <div class="mb-3">
+            <label for="Direccion" class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="Direccion" name="Direccion" value="@Model.Direccion" required>
+        </div>
+        <div class="mb-3">
+            <label for="Telefono" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="Telefono" name="Telefono" value="@Model.Telefono" required>
+        </div>
+        <div class="mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+    </form>
+</div>

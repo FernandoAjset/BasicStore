@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Cliente>
+
+@{
+    ViewData["Title"] = "Lista de Clientes";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <div class="text-end mb-3">
+        <a class="btn btn-primary" asp-action="CrearCliente">
+            <i class="bi bi-plus"></i> Agregar Nuevo Cliente
+        </a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre Cliente</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cliente in Model)
+            {
+                <tr>
+                    <td>@cliente.NombreCliente</td>
+                    <td>@cliente.Direccion</td>
+                    <td>@cliente.Telefono</td>
+                    <td>@cliente.Email</td>
+                    <td>
+                        <a class="btn btn-info btn-sm" asp-action="EditarCliente" asp-route-id="@cliente.NITCliente">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                        <a class="btn btn-danger btn-sm" asp-action="EliminarCliente" asp-route-NITCliente="@cliente.NITCliente">
+                            <i class="bi bi-trash"></i> Borrar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

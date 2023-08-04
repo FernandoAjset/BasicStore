@@ -1,0 +1,15 @@
+﻿@model Cliente
+
+@{
+    ViewData["Title"] = "Eliminar Cliente";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <p>¿Está seguro que desea eliminar al cliente @Model.NombreCliente?</p>
+    <form method="post">
+        <input type="text" class="form-control" id="NITCliente" name="NITCliente" value="@Model.NITCliente" hidden>
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a class="btn btn-secondary" asp-action="Index">Cancelar</a>
+    </form>
+</div>
