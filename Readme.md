@@ -21,28 +21,22 @@ Utiliza cookies para gestionar las sesiones de los usuarios y mejorar la experie
 ## Empezando
 Para comenzar con el proyecto "Basic Store", sigue estos pasos:
 
-- Clona el repositorio en tu máquina local:
-bash
-Copy code
+- Clona el repositorio en tu máquina local usando la consola de git y ejecutando:
 git clone https://github.com/FernandoAjset/BasicStore.git
-Asegúrate de tener instalado el SDK .NET 6 y SQL Server 2012 (o posterior).
+
+- Asegúrate de tener instalado el SDK .NET 6 y SQL Server 2012 (o posterior).
 
 - Crea una nueva base de datos en SQL Server para almacenar los datos del proyecto, el repositorio incluye el script "Script_creacion_BD.sql" con todo lo necesario para crear la base de datos.
 
 - Actualiza la cadena de conexión de la base de datos en los archivos de configuración del proyecto para que apunten a tu base de datos SQL Server.
 El archivo por defecto del proyecto que maneja la conexión es el "appsettings.json"
 
-Ejecuta el proyecto utilizando el siguiente comando:
-
 ### Uso de la aplicación
 Una vez que la aplicación esté en funcionamiento, puedes acceder a varios módulos y funciones:
 - Autenticación de Usuarios: Utiliza la página de inicio de sesión para acceder con tus credenciales de usuario. 
 El sistema te autenticará y establecerá una sesión utilizando cookies.
 Importante: por defecto en la base de datos se inserta un usuario de prueba que es
-User: "Admin"
-Contraseña: "password123"
-
-Puedes usar este usuario para ingresar por primera vez.
+User: "Admin", Contraseña: "password123". Puedes usar este usuario para ingresar por primera vez.
 
 - Módulo de Clientes: Ve a la sección de clientes para gestionar los registros de clientes. Puedes agregar nuevos clientes, ver sus detalles, editar registros existentes y eliminar clientes.
 
@@ -57,7 +51,7 @@ Puedes usar este usuario para ingresar por primera vez.
 ## Contacto
 Si tienes alguna pregunta o necesitas ayuda adicional o te interera mi trabajo puedes contactarme por:
 
-## Email
+### Email
 Dirección: fernando_ajset@hotmail.com
 
 ### Redes sociales:
