@@ -18,9 +18,6 @@ namespace ProyectoPrimerParcial.Controllers
         }
         public IActionResult Login()
         {
-            // Variable de sesión "IsLoggedIn" que indica si el usuario ha iniciado sesión.
-            ViewData["IsLoggedIn"] = false;
-
             return View();
         }
 
@@ -32,12 +29,6 @@ namespace ProyectoPrimerParcial.Controllers
                 bool exito = await usuarioService.AutenticarUsuario(usuario);
                 if (exito)
                 {
-                    // Convertir el objeto Usuario a formato JSON
-                    string usuarioJson = JsonSerializer.Serialize(usuario);
-
-                    // Guardar el JSON en la sesión
-                    HttpContext.Session.SetString("IsLoggedIn", usuarioJson);
-                    ViewData["IsLoggedIn"] = true;
                     await SetSession(usuario);
                     return RedirectToAction("Index", "Facturas");
                 }
@@ -65,11 +56,6 @@ namespace ProyectoPrimerParcial.Controllers
         {
             // Desautenticar al usuario
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            // Quitar el JSON en la sesión (si es necesario)
-            HttpContext.Session.Clear();
-
-            ViewData["IsLoggedIn"] = false;
             return RedirectToAction("Login", "Usuarios");
         }
 

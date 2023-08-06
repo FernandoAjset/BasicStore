@@ -1,17 +1,14 @@
 ﻿@using System.Text.Json
+@using System.Security.Claims
 @{
-    Usuario usuario = new Usuario();
-    var isLoggedInJson = ViewContext.HttpContext.Session.GetString("IsLoggedIn");
-    if (!string.IsNullOrEmpty(isLoggedInJson))
-    {
-        usuario = JsonSerializer.Deserialize<Usuario>(isLoggedInJson);
-    }
+    var currentUser = Context.User.Identity as ClaimsIdentity;
+    var userName = currentUser?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 }
 <ul class="navbar-nav">
-    @if (!string.IsNullOrEmpty(isLoggedInJson))
+    @if (Context.User.Identity.IsAuthenticated)
     {
         <li class="nav-item">
-            <span class="nav-link text-dark">Hola, @usuario.NombreUsuario</span>
+            <span class="nav-link text-dark">Hola, @userName</span>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark" asp-controller="Usuarios" asp-action="Registro">Registro</a>

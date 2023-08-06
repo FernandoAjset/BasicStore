@@ -31,10 +31,10 @@ namespace ProyectoPrimerParcial.Servicios
         {
             // Cifrar la contraseña utilizando el algoritmo SHA256
             byte[] passwordHash = GenerateHash(usuario.Contraseña);
-
+            string passwordBase64 = Convert.ToBase64String(passwordHash);
             // Guardar el usuario
             using var connection = new SqlConnection(connectionString);
-            var parameters = new { Operacion = "C", UsuarioId = 0, usuario.NombreUsuario, Contraseña = Convert.ToBase64String(passwordHash) };
+            var parameters = new { Operacion = "C", UsuarioId = 0, usuario.NombreUsuario, Contraseña = passwordBase64 };
 
             int usrId = await connection.ExecuteAsync("sp_Usuarios_CRUD", parameters, commandType: System.Data.CommandType.StoredProcedure);
 
