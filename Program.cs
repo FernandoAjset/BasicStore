@@ -9,7 +9,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSession();
 builder.Services.AddSingleton<IUsuarioService, UsuarioServicioWithDapper>();
 builder.Services.AddSingleton<IClientesService, ClientesServicioWithDapper>();
 builder.Services.AddSingleton<IArticulosService, ArticulosServiceWithDapper>();
@@ -29,7 +28,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

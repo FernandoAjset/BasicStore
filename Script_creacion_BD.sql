@@ -25,6 +25,11 @@ CREATE TABLE Usuarios (
     CONSTRAINT UQ_Usuarios_NombreUsuario UNIQUE (NombreUsuario)
 );
 
+INSERT INTO Usuarios
+VALUES(
+'Admin','75K3eLr+dx6JJFuJ7LwIpEpOFmwGZZkRiB84PURz6U8='  -- Decodificado password123
+)
+
 CREATE TABLE EncabezadoFactura (
     FacturaID INT PRIMARY KEY IDENTITY(1,1),
     FechaFactura DATE NOT NULL,
@@ -71,7 +76,7 @@ BEGIN
     BEGIN
         INSERT INTO Clientes (NITCliente,NombreCliente, Direccion, Telefono, Email)
         VALUES (@NITCliente,@NombreCliente, @Direccion, @Telefono, @Email)
-		SELECT SCOPE_IDENTITY();
+        SELECT SCOPE_IDENTITY();
     END
     ELSE IF @Operacion = 'R'
     BEGIN
@@ -176,7 +181,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE sp_EncabezadoFactura
+CREATE PROCEDURE [dbo].[sp_EncabezadoFactura]
     @Operacion CHAR(1), -- 'C' para Crear, 'R' para Leer, 'U' para Actualizar (solo NIT), 'D' para Eliminar
     @FacturaID INT,
     @FechaFactura DATE,
@@ -191,18 +196,32 @@ BEGIN
         VALUES (@FechaFactura, @NITCliente, 0); -- El TotalFactura se inicializa en 0
 
         -- Obtener el ID de la factura recién creada
-        SET @FacturaID = SCOPE_IDENTITY();
+        SELECT SCOPE_IDENTITY();
     END
     ELSE IF @Operacion = 'R'
     BEGIN
-        -- Leer información de una factura y sus detalles asociados
-        SELECT ef.FacturaID, ef.FechaFactura, ef.NITCliente, ef.TotalFactura,
-               df.DetalleID, df.ArticuloID, a.NombreArticulo, df.Cantidad, df.PrecioUnitario, df.Subtotal
-        FROM EncabezadoFactura ef
-        INNER JOIN Clientes c ON ef.NITCliente = c.NITCliente
-        LEFT JOIN DetalleFactura df ON ef.FacturaID = df.FacturaID
-        LEFT JOIN Articulos a ON df.ArticuloID = a.ArticuloID
-        WHERE ef.FacturaID = @FacturaID;
+	        IF @FacturaID=0
+			BEGIN
+				SELECT ef.FacturaID, ef.FechaFactura, ef.NITCliente, ef.TotalFactura,
+				df.DetalleID, df.ArticuloID, a.NombreArticulo, df.Cantidad, df.PrecioUnitario, df.Subtotal,
+				c.NombreCliente
+				FROM EncabezadoFactura ef
+				INNER JOIN Clientes c ON ef.NITCliente = c.NITCliente
+				LEFT JOIN DetalleFactura df ON ef.FacturaID = df.FacturaID
+				LEFT JOIN Articulos a ON df.ArticuloID = a.ArticuloID;
+			END
+			ELSE
+			BEGIN
+				-- Leer información de una factura y sus detalles asociados
+				SELECT ef.FacturaID, ef.FechaFactura, ef.NITCliente, ef.TotalFactura,
+					   df.DetalleID, df.ArticuloID, a.NombreArticulo, df.Cantidad, df.PrecioUnitario, df.Subtotal,
+					   c.NombreCliente
+				FROM EncabezadoFactura ef
+				INNER JOIN Clientes c ON ef.NITCliente = c.NITCliente
+				LEFT JOIN DetalleFactura df ON ef.FacturaID = df.FacturaID
+				LEFT JOIN Articulos a ON df.ArticuloID = a.ArticuloID
+				WHERE ef.FacturaID = @FacturaID;
+			END
     END
     ELSE IF @Operacion = 'U'
     BEGIN
@@ -225,7 +244,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE sp_DetalleFactura
+CREATE PROCEDURE [dbo].[sp_DetalleFactura]
     @Operacion CHAR(1), -- 'C' para Crear, 'R' para Leer, 'U' para Actualizar, 'D' para Eliminar
     @DetalleID INT,
     @FacturaID INT,
