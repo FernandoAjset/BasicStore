@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProyectoPrimerParcial.Models;
 using ProyectoPrimerParcial.Servicios;
 
 namespace ProyectoPrimerParcial.Controllers
 {
+    [Authorize]
     public class ClientesController : Controller
     {
         private readonly IClientesService clientesService;

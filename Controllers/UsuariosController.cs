@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.SqlServer.Server;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using ProyectoPrimerParcial.Models;
 using ProyectoPrimerParcial.Servicios;
+using System.Security.Claims;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace ProyectoPrimerParcial.Controllers
 {
@@ -38,7 +38,8 @@ namespace ProyectoPrimerParcial.Controllers
                     // Guardar el JSON en la sesión
                     HttpContext.Session.SetString("IsLoggedIn", usuarioJson);
                     ViewData["IsLoggedIn"] = true;
-                    return RedirectToAction("Index", "Home");
+                    await SetSession(usuario);
+                    return RedirectToAction("Index", "Facturas");
                 }
                 else
                 {
@@ -60,13 +61,18 @@ namespace ProyectoPrimerParcial.Controllers
         }
 
         [HttpPost]
-        public IActionResult LogOut()
+        public async Task<IActionResult> LogOut()
         {
-            // Quitar el JSON en la sesión
+            // Desautenticar al usuario
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Quitar el JSON en la sesión (si es necesario)
             HttpContext.Session.Clear();
+
             ViewData["IsLoggedIn"] = false;
             return RedirectToAction("Login", "Usuarios");
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Registro(Usuario usuario)
@@ -87,6 +93,25 @@ namespace ProyectoPrimerParcial.Controllers
             {
                 return RedirectToAction("Error", "Home", new { error = ex.Message });
             }
+        }
+
+        public async Task SetSession(Usuario usuario)
+        {
+            List<Claim> c = new()
+                                {
+                                        new Claim(ClaimTypes.NameIdentifier, usuario.NombreUsuario)
+
+                                };
+
+            ClaimsIdentity ci = new(c, CookieAuthenticationDefaults.AuthenticationScheme);
+            AuthenticationProperties p = new()
+            {
+                AllowRefresh = true,
+                IsPersistent = true,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1)
+            };
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(ci), p);
         }
     }
 }

@@ -1,0 +1,162 @@
+﻿@model FacturaViewModel
+@{
+    ViewData["Title"] = "Crear Factura";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label for="NITCliente">Seleccionar Cliente:</label>
+        <select class="form-control" id="NITCliente" name="NITCliente" asp-items="@Model.ClientesSelectList" required>
+            <option value="">Seleccione un cliente</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="ArticuloID">Seleccionar Producto:</label>
+        <select class="form-control" id="ArticuloID" name="ArticuloID" asp-items="@Model.ArticulosSelectList" onchange="onProductChange()">
+            <option value="">Seleccione un producto</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="PrecioUnitario">Precio Unitario:</label>
+        <input type="text" class="form-control" id="PrecioUnitario" name="PrecioUnitario" readonly>
+    </div>
+
+    <div class="form-group">
+        <label for="Cantidad">Cantidad:</label>
+        <input type="number" class="form-control" id="Cantidad" name="Cantidad" onchange="calcularSubtotal()">
+    </div>
+
+    <div class="form-group">
+        <label for="Subtotal">Subtotal:</label>
+        <input type="text" class="form-control" id="Subtotal" name="Subtotal" readonly>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="agregarDetalle()">Agregar Detalle</button>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>Articulo</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody id="detalles">
+            <!-- Aquí se agregarán los detalles -->
+        </tbody>
+    </table>
+
+    <button type="button" class="btn btn-success" onclick="grabarFactura()">Crear Factura</button>
+</form>
+
+@section Scripts {
+    <script>
+        var productos = @Html.Raw(Json.Serialize(Model.Articulos));
+        var detallesFactura = [];
+
+        function onProductChange() {
+            var selectedProductId = $("#ArticuloID").val();
+            var selectedProduct = productos.find(p => p.articuloID == selectedProductId);
+            if (selectedProduct) {
+                $("#PrecioUnitario").val(selectedProduct.precio);
+                calcularSubtotal();
+            } else {
+                $("#PrecioUnitario").val("");
+                $("#Cantidad").val("");
+                $("#Subtotal").val("");
+            }
+        }
+
+        function calcularSubtotal() {
+            var precioUnitario = parseFloat($("#PrecioUnitario").val()) || 0;
+            var cantidad = parseFloat($("#Cantidad").val()) || 0;
+            if (cantidad > 0) {
+                var subtotal = precioUnitario * cantidad;
+                $("#Subtotal").val(subtotal.toFixed(2));
+            }
+        }
+
+        function agregarDetalle() {
+            var selectedProductId = $("#ArticuloID").val();
+            var selectedProduct = productos.find(p => p.articuloID == selectedProductId);
+            var cantidad = parseFloat($("#Cantidad").val()) || 0;
+
+            if (selectedProduct && cantidad > 0) {
+                var subtotal = parseFloat($("#Subtotal").val()) || 0;
+
+                var detalleHtml = `
+                                                                                                                                            <tr>
+                                                                                                                                                <td>${selectedProduct.nombreArticulo}</td>
+                                                                                                                                                <td>${cantidad}</td>
+                                                                                                                                                <td>${selectedProduct.precio}</td>
+                                                                                                                                                <td>${subtotal.toFixed(2)}</td>
+                                                                                                                                            </tr>`;
+
+
+                let detalle = {
+                    detalleID: 0,
+                    facturaID: 0,
+                    articuloID: selectedProductId,
+                    cantidad: cantidad,
+                    precioUnitario: selectedProduct.precio,
+                    subtotal: subtotal,
+                };
+                this.detallesFactura.push(detalle);
+                $("#detalles").append(detalleHtml);
+                $("#PrecioUnitario").val("");
+                $("#Cantidad").val("");
+                $("#Subtotal").val("");
+                $("#ArticuloID").val('');
+
+            }
+        }
+
+
+        function grabarFactura() {
+            url = "@Url.Action("Crear", "Facturas")";
+            console.log(this.detallesFactura);
+            if (!this.detallesFactura.length > 0 || this.detallesFactura == undefined || this.detallesFactura == null) {
+                return;
+            }
+            nitCliente = $("#NITCliente").val();
+            if (nitCliente == 0 || nitCliente == undefined || nitCliente == null) {
+                return;
+            }
+
+            const nuevaFactura = {
+                nitCliente: nitCliente,
+                detalleFacturas: this.detallesFactura
+            };
+            console.log('Posteando...');
+            console.log(nuevaFactura);
+
+            fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json; charset=utf-8" },
+                body: JSON.stringify(nuevaFactura)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Si el POST fue exitoso, redirigir al index.
+                        const urlIndex = "@Url.Action("Index", "Facturas")";
+                        window.location.href = urlIndex;
+
+                    } else {
+                        // Si hubo algún error en el POST, manejarlo aquí
+                        console.error("Error en el POST:", response);
+                    }
+                })
+                .catch(error => {
+                    // En caso de error en la solicitud o procesamiento de la respuesta
+                    console.error("Error en la solicitud:", error);
+                });
+        };
+
+    </script>
+}

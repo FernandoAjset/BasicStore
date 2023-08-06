@@ -1,0 +1,40 @@
+﻿@model FacturaConsultaModel
+
+<h2>Factura @Model.FacturaID</h2>
+
+<p>Fecha: @Model.FechaFactura</p>
+<p>NIT Cliente: @Model.NITCliente</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Articulo</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var detalle in Model.Detalles)
+        {
+            <tr>
+                <td>@detalle.NombreArticulo</td>
+                <td>@detalle.Cantidad</td>
+                <td>@detalle.PrecioUnitario</td>
+                <td>@detalle.Subtotal</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>Total Factura: @Model.TotalFactura</p>
+<button type="button" class="btn btn-primary" onclick="imprimirFactura()">Imprimir</button>
+
+@section Scripts {
+    <script>
+        function imprimirFactura() {
+            window.print();
+        }
+    </script>
+}

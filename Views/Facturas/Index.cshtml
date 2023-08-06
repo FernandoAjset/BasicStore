@@ -1,0 +1,45 @@
+﻿@model IEnumerable<FacturaConsultaModel>
+
+@{
+    ViewData["Title"] = "Lista de Facturas";
+}
+
+<div class="container mt-4">
+    <h2>@ViewData["Title"]</h2>
+    <div class="text-end mb-3">
+        <a class="btn btn-primary" asp-action="CrearFactura">
+            <i class="bi bi-plus"></i> Crear Factura
+        </a>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>No. Factura</th>
+                <th>Fecha</th>
+                <th>NIT del Cliente</th>
+                <th>Total</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var factura in Model)
+            {
+                <tr>
+                    <td>@factura.FacturaID</td>
+                    <td>@factura.FechaFactura</td>
+                    <td>@factura.NITCliente</td>
+                    <td>@factura.TotalFactura</td>
+                    <td>
+@*                        <a class="btn btn-info btn-sm" asp-action="EditarArticulo" asp-route-FacturaID="@factura.FacturaID">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                        <a class="btn btn-danger btn-sm" asp-action="EliminarArticulo" asp-route-FacturaID="@factura.FacturaID">
+                            <i class="bi bi-trash"></i> Borrar
+                        </a>*@
+                        <a href="@Url.Action("ImprimirFactura", "Facturas", new { id = factura.FacturaID })">Imprimir Factura @factura.FacturaID</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
