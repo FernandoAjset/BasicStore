@@ -7,7 +7,7 @@
         public string Descripcion { get; set; }
         public string PrecioText { get; set; }
 
-        public decimal? Precio { get; set; }
+        public decimal Precio { get; set; }
         public int Stock { get; set; }
     }
 }

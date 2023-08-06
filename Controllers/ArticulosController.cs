@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProyectoPrimerParcial.Models;
 using ProyectoPrimerParcial.Servicios;
+using System.Globalization;
 
 namespace ProyectoPrimerParcial.Controllers
 {
@@ -35,6 +36,11 @@ namespace ProyectoPrimerParcial.Controllers
         /// <returns>Vista con el formulario de creación de artículo.</returns>
         public IActionResult CrearArticulo()
         {
+            // Obtener la configuración de cultura desde la ViewBag
+            CultureInfo culture = new CultureInfo("en-US");
+            culture.NumberFormat.NumberDecimalSeparator = ".";
+            // Pasar la configuración de cultura a la vista
+            ViewBag.Culture = culture;
             return View();
         }
 
@@ -48,28 +54,35 @@ namespace ProyectoPrimerParcial.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                CultureInfo culture = CultureInfo.InvariantCulture;
+                decimal cantidad;
+                string valorIngresado = articulo.PrecioText; // Valor ingresado en el campo de texto
+
+                if (decimal.TryParse(valorIngresado, NumberStyles.Number, culture, out cantidad) && cantidad >= 0)
                 {
-                    string precioText = articulo.PrecioText;
+                    articulo.Precio = cantidad;
+                }
+                else
+                {
+                    ModelState.AddModelError(nameof(articulo.PrecioText),
+                                $"El valor no es valido");
+                    return View(articulo);
+                }
+                if (!ModelState.IsValid)
+                {
+                    return View(articulo);
+                }
+                var exito = await articulosService.CrearArticulo(articulo);
 
-                    if (decimal.TryParse(precioText, out decimal precioConvert))
-                    {
-                        articulo.Precio = precioConvert;
-                    }
-                    else
-                    {
-                        return View(articulo);
-                    }
-
-                    var exito = await articulosService.CrearArticulo(articulo);
-
-                    if (exito)
-                    {
-                        return RedirectToAction("Index");
-                    }
+                if (exito)
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return RedirectToAction("Error", "Home", "No se pudo crear el artículo");
                 }
 
-                return View(articulo);
             }
             catch (Exception ex)
             {
@@ -93,6 +106,13 @@ namespace ProyectoPrimerParcial.Controllers
                 if (articulo == null)
                     return NotFound();
 
+                articulo.PrecioText = articulo.Precio.ToString();
+
+                // Obtener la configuración de cultura desde la ViewBag
+                CultureInfo culture = new CultureInfo("en-US");
+                culture.NumberFormat.NumberDecimalSeparator = ".";
+                // Pasar la configuración de cultura a la vista
+                ViewBag.Culture = culture;
                 // Mostrar la vista con el formulario de edición, pasando el artículo como modelo a la vista.
                 return View(articulo);
             }
@@ -113,41 +133,46 @@ namespace ProyectoPrimerParcial.Controllers
         {
             try
             {
-                // Verificar si el modelo del artículo recibido desde el formulario es válido.
-                if (ModelState.IsValid)
+                CultureInfo culture = CultureInfo.InvariantCulture;
+                decimal cantidad;
+                string valorIngresado = articulo.PrecioText; // Valor ingresado en el campo de texto
+
+                if (decimal.TryParse(valorIngresado, NumberStyles.Number, culture, out cantidad) && cantidad >= 0)
                 {
-                    // Obtener el texto del precio del artículo.
-                    string precioText = articulo.PrecioText;
-
-                    // Convertir el precio del artículo a tipo decimal utilizando TryParse.
-                    if (decimal.TryParse(precioText, out decimal precioConvert))
-                    {
-                        articulo.Precio = precioConvert;
-                    }
-                    else
-                    {
-                        // Si el precio no es válido, mostrar el formulario de edición con mensajes de error.
-                        return View(articulo);
-                    }
-
-                    // Llamar al servicio de artículos para actualizar el artículo en la base de datos.
-                    var result = await articulosService.ActualizarArticulo(articulo);
-
-                    // Si la actualización es exitosa, redireccionar a la lista de artículos.
-                    if (result)
-                        return RedirectToAction("Index");
-                    else
-                        // Si la actualización falla, agregar un mensaje de error al modelo y mostrar el formulario de edición nuevamente.
-                        ModelState.AddModelError("", "Error al actualizar el artículo.");
+                    articulo.Precio = cantidad;
+                }
+                else
+                {
+                    ModelState.AddModelError(nameof(articulo.PrecioText),
+                                $"El valor no es valido");
+                    return View(articulo);
+                }
+                // Verificar si el modelo del artículo recibido desde el formulario es válido.
+                if (!ModelState.IsValid)
+                {
+                    return View(articulo);
                 }
 
-                // Si el modelo no es válido, mostrar el formulario de edición con mensajes de error.
-                return View(articulo);
+                // Llamar al servicio de artículos para actualizar el artículo en la base de datos.
+                var result = await articulosService.ActualizarArticulo(articulo);
+
+                // Si la actualización es exitosa, redireccionar a la lista de artículos.
+                if (result)
+                    return RedirectToAction("Index");
+                else
+                    // En caso de error, redireccionar a la página de error con el mensaje de error.
+                    return RedirectToAction("Error", "Home", new
+                    {
+                        error = "No se pudo actualizar el artículo"
+                    }) ;
             }
             catch (Exception ex)
             {
                 // En caso de error, redireccionar a la página de error con el mensaje de error.
-                return RedirectToAction("Error", "Home", new { error = ex.Message });
+                return RedirectToAction("Error", "Home", new
+                {
+                    error = ex.Message
+                });
             }
         }
 

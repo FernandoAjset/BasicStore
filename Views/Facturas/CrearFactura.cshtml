@@ -1,7 +1,7 @@
 ﻿@model FacturaViewModel
 @{
     ViewData["Title"] = "Crear Factura";
-    Layout = "~/Views/Shared/_Layout.cshtml"; 
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -91,14 +91,12 @@
                 var subtotal = parseFloat($("#Subtotal").val()) || 0;
 
                 var detalleHtml = `
-                                                                                                                                            <tr>
-                                                                                                                                                <td>${selectedProduct.nombreArticulo}</td>
-                                                                                                                                                <td>${cantidad}</td>
-                                                                                                                                                <td>${selectedProduct.precio}</td>
-                                                                                                                                                <td>${subtotal.toFixed(2)}</td>
-                                                                                                                                            </tr>`;
-
-
+                            <tr>
+                                <td>${selectedProduct.nombreArticulo}</td>
+                                <td>${cantidad}</td>
+                                <td>${selectedProduct.precio}</td>
+                                <td>${subtotal.toFixed(2)}</td>
+                            </tr>`;
                 let detalle = {
                     detalleID: 0,
                     facturaID: 0,
@@ -148,15 +146,16 @@
                         window.location.href = urlIndex;
 
                     } else {
-                        // Si hubo algún error en el POST, manejarlo aquí
-                        console.error("Error en el POST:", response);
+                        const urlIndex = "@Url.Action("Error", "Home","Ocurrió un error al crear la factura")";
+                        window.location.href = urlIndex;
                     }
                 })
                 .catch(error => {
                     // En caso de error en la solicitud o procesamiento de la respuesta
                     console.error("Error en la solicitud:", error);
+                    const urlIndex = "@Url.Action("Error", "Home","Ocurrió un error al crear la factura")";
+                    window.location.href = urlIndex;
                 });
         };
-
     </script>
 }

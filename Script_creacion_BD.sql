@@ -27,7 +27,7 @@ CREATE TABLE Usuarios (
 
 INSERT INTO Usuarios
 VALUES(
-'Admin','75K3eLr+dx6JJFuJ7LwIpEpOFmwGZZkRiB84PURz6U8='  -- Decodificado password123
+'Admin','75K3eLr+dx6JJFuJ7LwIpEpOFmwGZZkRiB84PURz6U8='  -- Decodificado: password123
 )
 
 CREATE TABLE EncabezadoFactura (

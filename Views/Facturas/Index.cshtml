@@ -36,7 +36,9 @@
                         <a class="btn btn-danger btn-sm" asp-action="EliminarArticulo" asp-route-FacturaID="@factura.FacturaID">
                             <i class="bi bi-trash"></i> Borrar
                         </a>*@
-                        <a href="@Url.Action("ImprimirFactura", "Facturas", new { id = factura.FacturaID })">Imprimir Factura @factura.FacturaID</a>
+                        <a href="@Url.Action("ImprimirFactura", "Facturas", new { id = factura.FacturaID })" class="btn btn-info">
+                            <i class="bi bi-printer mr-1"></i> Imprimir Factura
+                            </a>
                     </td>
                 </tr>
             }
