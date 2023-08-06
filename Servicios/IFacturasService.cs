@@ -128,7 +128,7 @@ namespace ProyectoPrimerParcial.Servicios
                 };
 
                 // Ejecutar el SP para crear una nueva factura dentro de la transacción
-                var idFactura = await connection.QueryFirstAsync<int>(
+                var idFactura = await connection.QueryFirstOrDefaultAsync<int>(
                     "sp_EncabezadoFactura",
                     parameters,
                     commandType: CommandType.StoredProcedure,
@@ -172,7 +172,7 @@ namespace ProyectoPrimerParcial.Servicios
             {
                 // En caso de error, deshacer la transacción
                 transaction.Rollback();
-                throw; // Lanzar la excepción para que se maneje en la capa superior
+                return false; // Lanzar la excepción para que se maneje en la capa superior
             }
         }
 

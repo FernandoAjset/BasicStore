@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ProyectoPrimerParcial.Models;
 using ProyectoPrimerParcial.Servicios;
 
 namespace ProyectoPrimerParcial.Controllers
 {
+    [Authorize]
     public class FacturasController : Controller
     {
         private readonly IFacturasService facturasService;
