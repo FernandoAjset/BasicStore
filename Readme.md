@@ -1,5 +1,12 @@
 ﻿# Basic Store - Repositorio .NET 6 MVC
 ¡Bienvenido al repositorio de Basic Store! Este repositorio contiene un proyecto .NET 6 MVC que sirve como una tienda de comercio electrónico básica. El proyecto está construido utilizando SQL Server 2012 como base de datos y ofrece varios módulos para gestionar clientes, artículos y facturas. Además, incluye autenticación de usuarios, manejo de sesiones con cookies y la capacidad de registrar nuevos usuarios.
+## Demostración
+Puede ver la demostración ingresando a: 
+https://basicstore.azurewebsites.net/
+
+### Credenciales**
+**User:** Admin
+**Password:** password123
 
 ## Resumen del Proyecto
 El proyecto "Basic Store" tiene la siguiente estructura:
