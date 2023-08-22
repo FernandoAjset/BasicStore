@@ -4,9 +4,9 @@
 Puede ver la demostración ingresando a: 
 https://basicstore.azurewebsites.net/
 
-### Credenciales**
-**User:** Admin
-**Password:** password123
+### Credenciales
+**- User:** Admin
+**- Password:** password123
 
 ## Resumen del Proyecto
 El proyecto "Basic Store" tiene la siguiente estructura:
